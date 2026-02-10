@@ -1,0 +1,48 @@
+[project]
+name = "plotlylogomaker"
+version = "0.1.0"
+description = "A python project for making logos in plotly."
+readme = "README.md"
+requires-python = "<3.15,>=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "plotly>=5.23.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "kaleido==1.2.0",
+    "pre-commit==4.5.1",
+    "pytest==9.0.2",
+    "ruff==0.15.0",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# I - isort
+# D - pydocstyle
+# ANN - flake8-annotations
+extend-select = ["I", "D", "ANN"]
+
+[tool.ruff.lint.per-file-ignores]
+"test_*.py" = ["D", "ANN"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.0",
+]
