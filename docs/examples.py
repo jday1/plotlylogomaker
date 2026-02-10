@@ -1,14 +1,3 @@
-![Title](docs/title_logo.svg)
-
-The repository for plotlylogomaker. A python project for making logos in plotly similar to [logomaker](https://github.com/jbkinney/logomaker/tree/master/logomaker).
-plotlylogomaker is inspired by the work of Kevin Kovalchik which is available on [GitHub](https://github.com/aretaon/PlotlyLogo).
- 
-## Example
-
-<details open>
-<summary><strong>Code</strong></summary>
-
-```python
 from pathlib import Path
 
 import numpy as np
@@ -55,31 +44,3 @@ fig = go.Figure()
 add_logo(logo3, fig)
 fig.update_layout(height=800)
 fig.write_image(PLOTLYLOGOMAKER_PATH / "singleplot_negative_frequencies.svg")
-```
-</details>
-
-<details>
-<summary><strong>Single Plot Logo example</strong></summary>
-
-![Single Plot Logo example](docs/single_plot_example.svg)
-</details>
-<details>
-<summary><strong>Subplot Logo example</strong></summary>
-
-![Subplot Logo example](docs/subplot_example.svg)
-</details>
-<details>
-<summary><strong>Single Plot Logo with negative frequencies example</strong></summary>
-
-![Single Plot Logo with negative frequencies example](docs/singleplot_negative_frequencies.svg)
-</details>
-
-## Color Schemes
-
-Three color schemas are defined in plotlylogomaker.color:
-
-- [DMS](https://jbloomlab.github.io/dms_tools2/prefs.html)
-- Chemical Groups
-- Nucleotides
-
-One can define their own color scheme using the plotlylogomaker.color.ColorScheme class.
