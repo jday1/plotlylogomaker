@@ -1,3 +1,5 @@
+"""Defines the Logo class for generating Plotly-based sequence logos."""
+
 from typing import Any
 
 import numpy as np
@@ -6,9 +8,9 @@ import plotly.graph_objects as go
 from plotly.basedatatypes import _is_select_subplot_coordinates_arg
 from plotly.graph_objs import layout
 
-
 from plotlylogomaker.color import CHEMICAL_COLOR_SCHEME, ColorScheme
 from plotlylogomaker.svg import SVG_DEFINITIONS, SVGPath
+
 
 class Logo:
     """Generate the traces and shapes for a Plotly-based Sequence logo."""
@@ -21,27 +23,29 @@ class Logo:
         legend: bool = True,
         reflect_negative_symbols: bool = True,
     ) -> None:
-        """
+        """Initialize the Logo object with the input dataframe and configuration options.
+
         Args:
-            df (pd.DataFrame):
-                The preprocessed input dataframe. Row indices are sequence positions and columns are residues.
-                Values are relative frequencies or scores. All residues do not need to be specified in the columns.
-            color_scheme (ColorScheme):
-                The color scheme to use, by default uses the CHEMICAL_COLOR_SCHEME.
-            hover (bool):
-                Whether to include information when hovering over the logo for interactive inspection.
-            legend (bool):
-                Whether to include a legend in the plot illustrating the categories for the ColorScheme.
-            reflect_negative_symbols (bool):
-                Whether to reflect the negative symbols in the logo. If True, the negative symbols will be reflected
-                vertically. True by default.
+        df (pd.DataFrame):
+            The preprocessed input dataframe. Row indices are sequence positions and columns are residues.
+            Values are relative frequencies or scores. All residues do not need to be specified in the columns.
+        color_scheme (ColorScheme):
+            The color scheme to use, by default uses the CHEMICAL_COLOR_SCHEME.
+        hover (bool):
+            Whether to include information when hovering over the logo for interactive inspection.
+        legend (bool):
+            Whether to include a legend in the plot illustrating the categories for the ColorScheme.
+        reflect_negative_symbols (bool):
+            Whether to reflect the negative symbols in the logo. If True, the negative symbols will be reflected
+            vertically. True by default.
+
         """
         self.df = df
         self._positions = len(self.df)
         self.color_scheme = color_scheme
         self.hover = hover
         self.paths: list[tuple[str, str]] = []
-        self.residues = np.array(list(color_scheme.valid_residues))
+        self.residues = np.array(list(color_scheme.valid_keys))
         self.traces: list[go.Bar] = []
         self.shapes: list[dict] = []
         self.legend = legend
@@ -49,7 +53,7 @@ class Logo:
         self.y_adjustment = 0.005
         self.inverted_negative_symbols = reflect_negative_symbols
 
-        unexpected_residues = set(df.columns) - color_scheme.valid_residues
+        unexpected_residues = set(df.columns) - color_scheme.valid_keys
         if unexpected_residues:
             raise ValueError(f"Unexpected residues in the input data: {unexpected_residues}.")
 
@@ -70,9 +74,12 @@ class Logo:
 
         if self.legend:
             for _, color in self.color_scheme.colors.items():
-                self.traces.append(go.Bar(x=[None], y=[None], marker_color=color.hex, name=color.name))
+                self.traces.append(
+                    go.Bar(x=[None], y=[None], marker_color=color.hex, name=color.name)
+                )
 
     def add_shapes_and_traces(self) -> tuple[float, float]:
+        """Add shapes and traces to the logo based on the input dataframe."""
         min_y, max_y = 0.0, 0.0
         x = 0.5
         width = 1
@@ -85,7 +92,13 @@ class Logo:
 
             for aa, freq in positive_t.items():
                 if freq > 0:
-                    self.add_shape(aa, x + self.x_adjustment, x + width - self.x_adjustment, last_top + freq, last_top + self.y_adjustment)
+                    self.add_shape(
+                        aa,
+                        x + self.x_adjustment,
+                        x + width - self.x_adjustment,
+                        last_top + freq,
+                        last_top + self.y_adjustment,
+                    )
 
                 last_top += freq
                 max_y = max(max_y, last_top)
@@ -97,7 +110,11 @@ class Logo:
             last_bottom = 0.0
 
             for aa, freq in negative_t.items():
-                kwargs: dict[str, Any] = {"letter": aa, "left": x + self.x_adjustment, "right": x + width - self.x_adjustment}
+                kwargs: dict[str, Any] = {
+                    "letter": aa,
+                    "left": x + self.x_adjustment,
+                    "right": x + width - self.x_adjustment,
+                }
 
                 if self.inverted_negative_symbols:
                     kwargs["top"] = last_bottom + freq
@@ -120,6 +137,7 @@ class Logo:
         return min_y - self.y_adjustment, max_y + self.y_adjustment
 
     def add_shape(self, letter: str, left: float, right: float, top: float, bottom: float) -> None:
+        """Add a shape to the logo for a given letter and position."""
         path = SVGPath(SVG_DEFINITIONS[letter])
         path.invert("y")
         path.reposition(left=left, right=right, bottom=bottom, top=top)
@@ -137,6 +155,7 @@ class Logo:
         )
 
     def add_trace(self, idx: int, series: pd.Series) -> None:
+        """Add a trace to the logo for a given position and series of frequencies."""
         self.traces.append(
             go.Bar(
                 x=[idx + 1] * len(series),
@@ -152,42 +171,42 @@ class Logo:
 
 
 def make_shape(
-    arg: Any | None = None,
-    editable: Any | None = None,
-    fillcolor: Any | None = None,
-    fillrule: Any | None = None,
-    label: Any | None = None,
-    layer: Any | None = None,
-    legend: Any | None = None,
-    legendgroup: Any | None = None,
-    legendgrouptitle: Any | None = None,
-    legendrank: Any | None = None,
-    legendwidth: Any | None = None,
-    line: Any | None = None,
-    name: Any | None = None,
-    opacity: Any | None = None,
-    path: Any | None = None,
-    showlegend: Any | None = None,
-    templateitemname: Any | None = None,
-    type: Any | None = None,
-    visible: Any | None = None,
-    x0: Any | None = None,
-    x0shift: Any | None = None,
-    x1: Any | None = None,
-    x1shift: Any | None = None,
-    xanchor: Any | None = None,
-    xref: Any | None = None,
-    xsizemode: Any | None = None,
-    y0: Any | None = None,
-    y0shift: Any | None = None,
-    y1: Any | None = None,
-    y1shift: Any | None = None,
-    yanchor: Any | None = None,
-    yref: Any | None = None,
-    ysizemode: Any | None = None,
+    arg: Any | None = None,  # noqa: ANN401
+    editable: Any | None = None,  # noqa: ANN401
+    fillcolor: Any | None = None,  # noqa: ANN401
+    fillrule: Any | None = None,  # noqa: ANN401
+    label: Any | None = None,  # noqa: ANN401
+    layer: Any | None = None,  # noqa: ANN401
+    legend: Any | None = None,  # noqa: ANN401
+    legendgroup: Any | None = None,  # noqa: ANN401
+    legendgrouptitle: Any | None = None,  # noqa: ANN401
+    legendrank: Any | None = None,  # noqa: ANN401
+    legendwidth: Any | None = None,  # noqa: ANN401
+    line: Any | None = None,  # noqa: ANN401
+    name: Any | None = None,  # noqa: ANN401
+    opacity: Any | None = None,  # noqa: ANN401
+    path: Any | None = None,  # noqa: ANN401
+    showlegend: Any | None = None,  # noqa: ANN401
+    templateitemname: Any | None = None,  # noqa: ANN401
+    type: Any | None = None,  # noqa: ANN401
+    visible: Any | None = None,  # noqa: ANN401
+    x0: Any | None = None,  # noqa: ANN401
+    x0shift: Any | None = None,  # noqa: ANN401
+    x1: Any | None = None,  # noqa: ANN401
+    x1shift: Any | None = None,  # noqa: ANN401
+    xanchor: Any | None = None,  # noqa: ANN401
+    xref: Any | None = None,  # noqa: ANN401
+    xsizemode: Any | None = None,  # noqa: ANN401
+    y0: Any | None = None,  # noqa: ANN401
+    y0shift: Any | None = None,  # noqa: ANN401
+    y1: Any | None = None,  # noqa: ANN401
+    y1shift: Any | None = None,  # noqa: ANN401
+    yanchor: Any | None = None,  # noqa: ANN401
+    yref: Any | None = None,  # noqa: ANN401
+    ysizemode: Any | None = None,  # noqa: ANN401
     **kwargs: dict[str, Any],
 ) -> layout.Shape:
-    """This function is a helper function to create a shape object for Plotly figures.
+    """Create a shape object for Plotly figures.
 
     It replicates the logic in the plotly.graph_objects._figure.Figure.add_shape method to create a layout.Shape object
     but just returns the object rather than making a subsequent call. Instead, the returned objects are passed as a list
@@ -245,7 +264,7 @@ def add_shapes(
     secondary_y: bool | None = None,
     exclude_empty_subplots: bool = False,
 ) -> go.Figure:
-    """This function is a helper function to add multiple shapes to the same figure.
+    """Add multiple shapes to the same figure.
 
     This was introduced because plotly.graph_objects.Figure.add_shape only adds a single shape at a time
     which is costly in terms of performance.
@@ -254,7 +273,6 @@ def add_shapes(
     (new_objs) rather than a single obj as the original method does. To account for this, this function introduces checks to
     ensure that the axes references are consistent across all shapes given in new_objs.
     """
-
     yrefs = {new_obj.yref for new_obj in new_objs}
     if len(yrefs) > 1:
         raise ValueError("Cannot add shapes to multiple yrefs at once.\n")
@@ -262,9 +280,13 @@ def add_shapes(
 
     # Make sure we have both row and col or neither
     if row is not None and col is None:
-        raise ValueError("Received row parameter but not col.\nrow and col must be specified together")
+        raise ValueError(
+            "Received row parameter but not col.\nrow and col must be specified together"
+        )
     elif col is not None and row is None:
-        raise ValueError("Received col parameter but not row.\nrow and col must be specified together")
+        raise ValueError(
+            "Received col parameter but not row.\nrow and col must be specified together"
+        )
 
     # Address multiple subplots
     if row is not None and _is_select_subplot_coordinates_arg(row, col):
@@ -288,9 +310,13 @@ def add_shapes(
     if row is not None and col is not None:
         grid_ref = fig._validate_get_grid_ref()
         if row > len(grid_ref):
-            raise IndexError(f"row index {row} out-of-bounds, row index must be between 1 and {len(grid_ref)}, inclusive.")
+            raise IndexError(
+                f"row index {row} out-of-bounds, row index must be between 1 and {len(grid_ref)}, inclusive."
+            )
         if col > len(grid_ref[row - 1]):
-            raise IndexError(f"column index {col} out-of-bounds, column index must be between 1 and {len(grid_ref[row - 1])}, inclusive.")
+            raise IndexError(
+                f"column index {col} out-of-bounds, column index must be between 1 and {len(grid_ref[row - 1])}, inclusive."
+            )
         refs = grid_ref[row - 1][col - 1]
         if not refs:
             raise ValueError(f"No subplot found at position ({row}, {col})")
@@ -322,7 +348,9 @@ because subplot does not have a secondary y-axis"""
             xref = xaxis.replace("axis", "")
         # if exclude_empty_subplots is True, check to see if subplot is
         # empty and return if it is
-        if exclude_empty_subplots and (not fig._subplot_not_empty(xref, yref, selector=bool(exclude_empty_subplots))):
+        if exclude_empty_subplots and (
+            not fig._subplot_not_empty(xref, yref, selector=bool(exclude_empty_subplots))
+        ):
             return fig
 
         # in case the user specified they wanted an axis to refer to the
@@ -331,7 +359,10 @@ because subplot does not have a secondary y-axis"""
         def _add_domain(ax_letter: str, new_axref: str) -> str:
             axref = ax_letter + "ref"
 
-            axrefs_present = {axref in new_obj._props.keys() and "domain" in new_obj[axref] for new_obj in new_objs}
+            axrefs_present = {
+                axref in new_obj._props.keys() and "domain" in new_obj[axref]
+                for new_obj in new_objs
+            }
             if len(axrefs_present) > 1:
                 raise ValueError("axref_present must be the same for all shapes")
             axref_domain_present = axrefs_present.pop()

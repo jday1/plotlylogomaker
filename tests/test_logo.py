@@ -55,13 +55,20 @@ def test_bar_called_when_hover_false_and_legend_true(sample_df: pd.DataFrame):
         assert mock_bar.called, "Expected go.Bar to be called when hover=False and legend=True"
         assert len(logo.traces) > 0, "Expected non-empty traces when legend=True"
 
-        found = any(call_args.kwargs.get("x") == [None] and call_args.kwargs.get("y") == [None] for call_args in mock_bar.call_args_list)
+        found = any(
+            call_args.kwargs.get("x") == [None] and call_args.kwargs.get("y") == [None]
+            for call_args in mock_bar.call_args_list
+        )
         assert found, "Expected go.Bar to be called with x=[None] and y=[None]"
 
 
 def test_values_less_than_zero():
     # Prepare a DataFrame with some negative values
-    data = {"A": [0.2, -0.1, 0.1], "C": [0.1, -0.3, 0.2], "D": [0.3, 0.4, 0.1]}  # Negative value in the 'A' column
+    data = {
+        "A": [0.2, -0.1, 0.1],
+        "C": [0.1, -0.3, 0.2],
+        "D": [0.3, 0.4, 0.1],
+    }  # Negative value in the 'A' column
     df = pd.DataFrame(data)
 
     Logo(df)
@@ -91,5 +98,8 @@ def test_add_logo_invalid_args(sample_df):
     logo = Logo(df=sample_df, hover=False, legend=True)
     fig = make_subplots(rows=1, cols=2)
 
-    with pytest.raises(ValueError, match="Received rows parameter but not cols.\nrows and cols must be specified together"):
+    with pytest.raises(
+        ValueError,
+        match="Received rows parameter but not cols.\nrows and cols must be specified together",
+    ):
         add_logo(logo, fig, row=1, col=None)

@@ -1,3 +1,5 @@
+"""Defines SVG path data for each letter used in the logo."""
+
 from dataclasses import dataclass
 
 SVG_DEFINITIONS: dict[str, str] = {
@@ -117,9 +119,7 @@ SVG_DEFINITIONS: dict[str, str] = {
         "L 1.72 0 L 1.72 6.02 L 6.4 0 "
         "L 8.38 0 L 4.5 4.9 L 9.32 14 Z"
     ),
-    "L": (
-        "M 8.38 14 L 0 14 L 0 0 L 1.72 0 L 1.72 12.34 L 8.38 12.34 Z"
-    ),
+    "L": ("M 8.38 14 L 0 14 L 0 0 L 1.72 0 L 1.72 12.34 L 8.38 12.34 Z"),
     "M": (
         "M 1.58 14 L 0 14 L 0 0 L 1.86 0 "
         "L 3.96 8.38 Q 4.18 9.26 4.26 9.84 "
@@ -232,11 +232,7 @@ SVG_DEFINITIONS: dict[str, str] = {
         "Q 1.43 7.242 0.825 6.802 "
         "Q 0.22 6.362 0 5.692 Z"
     ),
-    "T": (
-        "M 5.74 14 L 4.02 14 L 4.02 1.66 "
-        "L 0 1.66 L 0 0 L 9.76 0 "
-        "L 9.76 1.66 L 5.74 1.66 Z"
-    ),
+    "T": ("M 5.74 14 L 4.02 14 L 4.02 1.66 L 0 1.66 L 0 0 L 9.76 0 L 9.76 1.66 L 5.74 1.66 Z"),
     "U": (
         "M 0 0 L 1.72 0 L 1.72 8.7 "
         "Q 1.72 10.9 2.45 12 "
@@ -284,10 +280,7 @@ SVG_DEFINITIONS: dict[str, str] = {
         "L 3.74 7 Z"
     ),
     "Y": (
-        "M 4.9 6.78 L 7.92 0 L 9.76 0 "
-        "L 5.76 8.48 L 5.76 14 "
-        "L 4.04 14 L 4.04 8.48 "
-        "L 0 0 L 1.92 0 Z"
+        "M 4.9 6.78 L 7.92 0 L 9.76 0 L 5.76 8.48 L 5.76 14 L 4.04 14 L 4.04 8.48 L 0 0 L 1.92 0 Z"
     ),
     "Z": (
         "M 0 0 L 9.76 0 L 9.76 1.64 "
@@ -301,52 +294,77 @@ SVG_DEFINITIONS: dict[str, str] = {
 }
 
 
-
 @dataclass
 class Point:
-    """
-    x,y point used for representing svg co-ordinates.
-    """
+    """x,y point used for representing svg co-ordinates."""
 
     x: float
     y: float
 
 
 class PathSegment:
-    """
-    A segment of an SVG path. Consists of the kind of path (i.e. M, L, Q, C, Z) and corresponding x,y points. "A" is not
+    """A segment of an SVG path.
+
+    Consists of the kind of path (i.e. M, L, Q, C, Z) and corresponding x,y points. "A" is not
     supported by Plotly and thus is not a valid kind of path.
     """
 
-    def __init__(self, kind: str, coords: list[Point]):
+    def __init__(self, kind: str, coords: list[Point]) -> None:
+        """Initialize the PathSegment object.
+
+        Args:
+            kind (str): The kind of the path segment (M, L, Q, C, Z).
+            coords (list[Point]): The coordinates of the path segment.
+
+        """
         if kind == "M":
             if len(coords) != 1:
-                raise ValueError("For path segments of type 'M', the coordinate argument must be a list of 1 point")
+                raise ValueError(
+                    "For path segments of type 'M', the coordinate argument must be a list of 1 point"
+                )
             if not isinstance(coords[0], Point):
-                raise TypeError("For path segments of type 'M', the coordinate argument must be a list of 1 point")
+                raise TypeError(
+                    "For path segments of type 'M', the coordinate argument must be a list of 1 point"
+                )
 
         elif kind == "L":
             if len(coords) != 1:
-                raise ValueError("For path segments of type 'L', the coordinate argument must be a list of 1 point")
+                raise ValueError(
+                    "For path segments of type 'L', the coordinate argument must be a list of 1 point"
+                )
             if not isinstance(coords[0], Point):
-                raise TypeError("For path segments of type 'L', the coordinate argument must be a list of 1 point")
+                raise TypeError(
+                    "For path segments of type 'L', the coordinate argument must be a list of 1 point"
+                )
 
         elif kind == "Q":
             if len(coords) != 2:
-                raise ValueError("For path segments of type 'Q', the coordinate argument must be a list of 2 points")
+                raise ValueError(
+                    "For path segments of type 'Q', the coordinate argument must be a list of 2 points"
+                )
             if False in [isinstance(p, Point) for p in coords]:
-                raise TypeError("For path segments of type 'Q', the coordinate argument must be a list of 2 points")
+                raise TypeError(
+                    "For path segments of type 'Q', the coordinate argument must be a list of 2 points"
+                )
 
         elif kind == "C":
             if len(coords) != 3:
-                raise ValueError("For path segments of type 'C', the coordinate argument must be a list of 3 points")
+                raise ValueError(
+                    "For path segments of type 'C', the coordinate argument must be a list of 3 points"
+                )
             if False in [isinstance(p, Point) for p in coords]:
-                raise TypeError("For path segments of type 'C', the coordinate argument must be a list of 3 points")
+                raise TypeError(
+                    "For path segments of type 'C', the coordinate argument must be a list of 3 points"
+                )
         elif kind == "Z":
             if coords:
-                raise TypeError("For path segments of type 'Z', the coordinate argument must an empty list")
+                raise TypeError(
+                    "For path segments of type 'Z', the coordinate argument must an empty list"
+                )
         elif kind == "A":
-            raise ValueError("Plotly only works with absolute paths, so 'A' is not allowed in the SVG path.")
+            raise ValueError(
+                "Plotly only works with absolute paths, so 'A' is not allowed in the SVG path."
+            )
 
         self.kind: str = kind
         self.coords: list[Point] = coords
@@ -355,7 +373,13 @@ class PathSegment:
 class SVGPath:
     """Create an SVGPath based on a path string."""
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
+        """Initialize the SVGPath object.
+
+        Args:
+            path (str): The SVG path string to parse.
+
+        """
         path_components = path.split(" ")
 
         self.path: list[PathSegment] = []
@@ -370,8 +394,19 @@ class SVGPath:
                     continue
                 path_index += 1
                 points = []
-                while path_components[path_index].replace(".", "").replace("-", "").replace("+", "").isnumeric():
-                    points.append(Point(float(path_components[path_index]), float(path_components[path_index + 1])))
+                while (
+                    path_components[path_index]
+                    .replace(".", "")
+                    .replace("-", "")
+                    .replace("+", "")
+                    .isnumeric()
+                ):
+                    points.append(
+                        Point(
+                            float(path_components[path_index]),
+                            float(path_components[path_index + 1]),
+                        )
+                    )
                     path_index = path_index + 2
                     if path_index >= len(path_components):
                         break  # pragma: no cover
@@ -385,11 +420,11 @@ class SVGPath:
         self.bottom: float = 0
 
     def normalize(self) -> None:
-        """
-        Normalizes the path so that all x and y coordinates lie between 0 and 1.
+        """Normalize the path so that all x and y coordinates lie between 0 and 1.
 
         Returns:
             None
+
         """
         max_x = -1e12
         min_x = 1e12
@@ -417,14 +452,14 @@ class SVGPath:
                 point.y = (point.y - min_y) / (max_y - min_y)
 
     def invert(self, axis: str) -> None:
-        """
-        Inverts the x and/or y components of a path.
+        """Inverts the x and/or y components of a path.
 
         Args:
             axis (str): The axis to invert. Must be one of "x", "y", or "both".
 
         Returns:
             None
+
         """
         for segment in self.path:
             if segment.kind == "Z":
@@ -436,8 +471,7 @@ class SVGPath:
                     point.y = 1 - point.y
 
     def reposition(self, left: float, right: float, top: float, bottom: float) -> None:
-        """
-        Repositions and resizes the path.
+        """Repositions and resizes the path.
 
         Args:
             left (float): The new left coordinate.
@@ -447,6 +481,7 @@ class SVGPath:
 
         Returns:
             None
+
         """
         x_ratio = (right - left) / (self.right - self.left)
         y_ratio = (top - bottom) / (self.top - self.bottom)
@@ -462,11 +497,11 @@ class SVGPath:
         self.top = top
 
     def __str__(self) -> str:
-        """
-        Returns the path as an SVG-compatible string.
+        """Return the path as an SVG-compatible string.
 
         Returns:
             str: The string representation of the path.
+
         """
         string = []
         for segment in self.path:

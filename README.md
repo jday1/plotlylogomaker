@@ -19,10 +19,32 @@ from plotly.subplots import make_subplots
 from plotlylogomaker.color import DMS_COLOR_SCHEME
 from plotlylogomaker.logo import Logo, add_logo
 
-AMINO_ACIDS = ("A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y")
+AMINO_ACIDS = (
+    "A",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "K",
+    "L",
+    "M",
+    "N",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "V",
+    "W",
+    "Y",
+)
 PLOTLYLOGOMAKER_PATH = Path("docs")
 
 np.random.seed(42)
+
 
 def mock_logo(positions: int, legend: bool, adjustment: float = 0.0) -> Logo:
     """Mock function to create a logo with a specified number of positions."""
@@ -31,6 +53,7 @@ def mock_logo(positions: int, legend: bool, adjustment: float = 0.0) -> Logo:
     normalized = frequencies.div(frequencies.sum(axis=0), axis=1).T
     normalized = normalized - adjustment
     return Logo(df=normalized, legend=legend, color_scheme=DMS_COLOR_SCHEME, hover=True)
+
 
 logo1 = mock_logo(8, legend=True)
 logo2 = mock_logo(6, legend=False)

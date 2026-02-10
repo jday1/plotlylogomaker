@@ -1,4 +1,5 @@
-# %%
+"""Generates a title logo for the Plotly LogoMaker documentation using random frequencies and a custom color scheme."""
+
 import string
 from pathlib import Path
 
