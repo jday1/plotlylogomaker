@@ -1,7 +1,7 @@
 ![Title](https://raw.githubusercontent.com/jday1/plotlylogomaker/main/docs/title_logo.svg)
 
-The repository for plotlylogomaker. A python project for making logos in plotly similar to [logomaker](https://github.com/jbkinney/logomaker/tree/master/logomaker).
-plotlylogomaker is inspired by the work of Kevin Kovalchik which is available on [GitHub](https://github.com/kevinkovalchik/Plotly-Logo).
+A python project for making logos in plotly similar to [logomaker](https://github.com/jbkinney/logomaker/tree/master/logomaker).
+plotlylogomaker is inspired by the work of [Kevin Kovalchik](https://github.com/kevinkovalchik/Plotly-Logo).
  
 ## Example
 
@@ -105,5 +105,4 @@ Three color schemes are defined in plotlylogomaker.color:
 - Chemical Groups
 - Nucleotides
 
-One can define their own color scheme using the plotlylogomaker.color.ColorScheme class.
-Currently, all alphabet letters can be used as keys.
+Users can define custom color schemes via the plotlylogomaker.color.ColorScheme class, where alphabet letters serve as the keys.

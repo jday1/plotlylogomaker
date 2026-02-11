@@ -1,6 +1,6 @@
 [project]
 name = "plotlylogomaker"
-version = "0.1.0"
+version = "0.1.1"
 description = "A python project for making logos in plotly."
 readme = "README.md"
 requires-python = "<3.15,>=3.11"
