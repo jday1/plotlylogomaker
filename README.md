@@ -1,7 +1,7 @@
-![Title](docs/title_logo.svg)
+![Title](https://raw.githubusercontent.com/jday1/plotlylogomaker/main/docs/title_logo.svg)
 
-The repository for plotlylogomaker. A python project for making logos in plotly similar to [logomaker](https://github.com/jbkinney/logomaker/tree/master/logomaker).
-plotlylogomaker is inspired by the work of Kevin Kovalchik which is available on [GitHub](https://github.com/kevinkovalchik/Plotly-Logo).
+A python project for making logos in plotly similar to [logomaker](https://github.com/jbkinney/logomaker/tree/master/logomaker).
+plotlylogomaker is inspired by the work of [Kevin Kovalchik](https://github.com/kevinkovalchik/Plotly-Logo).
  
 ## Example
 
@@ -84,17 +84,17 @@ fig.write_image(PLOTLYLOGOMAKER_PATH / "singleplot_negative_frequencies.svg")
 <details>
 <summary><strong>Single Plot Logo example</strong></summary>
 
-![Single Plot Logo example](docs/single_plot_example.svg)
+![Single Plot Logo example](https://raw.githubusercontent.com/jday1/plotlylogomaker/main/docs/single_plot_example.svg)
 </details>
 <details>
 <summary><strong>Subplot Logo example</strong></summary>
 
-![Subplot Logo example](docs/subplot_example.svg)
+![Subplot Logo example](https://raw.githubusercontent.com/jday1/plotlylogomaker/main/docs/subplot_example.svg)
 </details>
 <details>
 <summary><strong>Single Plot Logo with negative frequencies example</strong></summary>
 
-![Single Plot Logo with negative frequencies example](docs/singleplot_negative_frequencies.svg)
+![Single Plot Logo with negative frequencies example](https://raw.githubusercontent.com/jday1/plotlylogomaker/main/docs/singleplot_negative_frequencies.svg)
 </details>
 
 ## Color Schemes
@@ -105,5 +105,4 @@ Three color schemes are defined in plotlylogomaker.color:
 - Chemical Groups
 - Nucleotides
 
-One can define their own color scheme using the plotlylogomaker.color.ColorScheme class.
-Currently, all alphabet letters can be used as keys.
+Users can define custom color schemes via the plotlylogomaker.color.ColorScheme class, where alphabet letters serve as the keys.
